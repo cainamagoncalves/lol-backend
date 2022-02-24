@@ -1,2 +1,6 @@
 # DEPENDENCIES
 /node_modules
+
+# ENV FILES
+.env.local
+.env
