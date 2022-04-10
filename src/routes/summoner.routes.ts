@@ -1,10 +1,8 @@
 import Routes from "express"
-import { FindSummonerByName } from "../usecases/summoner/find-summoner-by-name-usecase"
+import { findSummonerByNameController } from "../usecases/summoner"
 
 const routes = Routes()
 
-const findSummonerByName = new FindSummonerByName()
-
-routes.get("/summoner/:summonerName", findSummonerByName.execute)
+routes.get("/summoner/:summonerName", (request, response) => findSummonerByNameController.handle(request, response))
 
 export { routes as summonerRoutes }

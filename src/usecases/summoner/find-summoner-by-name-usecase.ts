@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
 import { riotApi } from "../../api/riot/riotApi";
+import { IFindSummonerByNameDTO } from "./find-summoner-by-name-DTO";
 
-type FindSummonerByNameResponse = {
+interface IFindSummonerByNameResponse {
   id: string;
   accountId: string;
   puuid: string;
@@ -11,22 +11,14 @@ type FindSummonerByNameResponse = {
   summonerLevel: number;
 };
 
-export class FindSummonerByName {
+export class FindSummonerByNameUseCase {
 
-  async execute(request: Request, response: Response) {
+  async execute(data: IFindSummonerByNameDTO) {
 
-    try {
-      const { summonerName } = request.params;
-  
-      const { data } = await riotApi.get<FindSummonerByNameResponse>(`/lol/summoner/v4/summoners/by-name/${encodeURI(summonerName)}`, {
-        headers: { 'X-Riot-Token': process.env.RIOT_API_TOKEN ?? '' },
-      })
-  
-      return response.json(data);
+    const { data: findSummonerByNameResponseData } = await riotApi.get<IFindSummonerByNameResponse>(`/lol/summoner/v4/summoners/by-name/${encodeURI(data.summonerName)}`, {
+      headers: { "X-Riot-Token": process.env.RIOT_API_TOKEN ?? '' }
+    })
 
-    } catch (err: any) {
-      
-      return response.status(err.response.status).json(err.response.data)
-    }
+    return findSummonerByNameResponseData;
   }
 }
